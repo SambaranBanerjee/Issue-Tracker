@@ -148,11 +148,3 @@ Contributions are welcome\! Please follow these steps:
 ## 📜 License
 
 This project is licensed under the MIT License.
-
------
-
-## 🙌 Acknowledgements
-
-  * The Angular team for the amazing framework.
-  * Python & FastAPI/Flask for backend simplicity.
-  * You, for checking out this project\!
