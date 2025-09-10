@@ -1,0 +1,130 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>Issue Tracker</h2>
+  <button class="btn btn-primary" (click)="createIssue()">Create Issue</button>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Search issues..." 
+               [(ngModel)]="query.search" (input)="onSearchInput($event)">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <select class="form-select" [(ngModel)]="query.status" (change)="onFilterChange()">
+          <option *ngFor="let option of statusOptions" [value]="option">
+            {{ option === '' ? 'All Statuses' : option }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <select class="form-select" [(ngModel)]="query.priority" (change)="onFilterChange()">
+          <option *ngFor="let option of priorityOptions" [value]="option">
+            {{ option === '' ? 'All Priorities' : option }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="Filter by assignee" 
+               [(ngModel)]="query.assignee" (input)="onSearchInput($event)">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th (click)="onSort('status')" style="cursor: pointer;">
+              Status 
+              <span *ngIf="query.sortBy === 'status'">{{query.sortOrder === 'asc' ? '↑' : '↓'}}</span>
+            </th>
+            <th (click)="onSort('priority')" style="cursor: pointer;">
+              Priority
+              <span *ngIf="query.sortBy === 'priority'">{{query.sortOrder === 'asc' ? '↑' : '↓'}}</span>
+            </th>
+            <th>Assignee</th>
+            <th (click)="onSort('updatedAt')" style="cursor: pointer;">
+              Last Updated
+              <span *ngIf="query.sortBy === 'updatedAt'">{{query.sortOrder === 'asc' ? '↑' : '↓'}}</span>
+            </th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let issue of issues" (click)="viewIssue(issue.id)" style="cursor: pointer;">
+            <td>{{ issue.id | slice:0:8 }}...</td>
+            <td>{{ issue.title }}</td>
+            <td>
+              <span class="badge" [ngClass]="{
+                'bg-success': issue.status === 'closed',
+                'bg-warning': issue.status === 'in progress',
+                'bg-danger': issue.status === 'open'
+              }">
+                {{ issue.status }}
+              </span>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="{
+                'bg-danger': issue.priority === 'high',
+                'bg-warning': issue.priority === 'medium',
+                'bg-info': issue.priority === 'low'
+              }">
+                {{ issue.priority }}
+              </span>
+            </td>
+            <td>{{ issue.assignee }}</td>
+            <td>{{ issue.updatedAt | date:'medium' }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary" (click)="editIssue($event, issue.id)">
+                Edit
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="issues.length === 0" class="text-center py-4">
+      No issues found.
+    </div>
+
+    <div *ngIf="issues.length > 0" class="d-flex justify-content-between align-items-center mt-3">
+      <div>
+        <select class="form-select form-select-sm d-inline-block me-2" style="width: auto;" 
+                [(ngModel)]="query.pageSize" (change)="onPageSizeChange(query.pageSize)">
+          <option value="5">5 per page</option>
+          <option value="10">10 per page</option>
+          <option value="20">20 per page</option>
+        </select>
+        <span class="text-muted">
+          Showing {{ (query.page - 1) * query.pageSize + 1 }} to {{ query.page * query.pageSize > total ? total : query.page * query.pageSize }} of {{ total }} issues
+        </span>
+      </div>
+      
+      <nav>
+        <ul class="pagination">
+          <li class="page-item" [class.disabled]="query.page === 1">
+            <a class="page-link" (click)="onPageChange(query.page - 1)">Previous</a>
+          </li>
+          
+          <li class="page-item" *ngFor="let page of getPages()" [class.active]="page === query.page">
+            <a class="page-link" (click)="onPageChange(page)">{{ page }}</a>
+          </li>
+          
+          <li class="page-item" [class.disabled]="query.page * query.pageSize >= total">
+            <a class="page-link" (click)="onPageChange(query.page + 1)">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="card">
+  <div class="card-header">{{ isEdit ? 'Edit Issue' : 'Create Issue' }}</div>
+  <div class="card-body">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label>Title</label>
+        <input class="form-control" formControlName="title">
+      </div>
+      <div class="mb-3">
+        <label>Description</label>
+        <textarea class="form-control" formControlName="description"></textarea>
+      </div>
+      <div class="mb-3">
+        <label>Status</label>
+        <select class="form-control" formControlName="status">
+          <option value="open">Open</option>
+          <option value="in-progress">In Progress</option>
+          <option value="closed">Closed</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label>Priority</label>
+        <select class="form-control" formControlName="priority">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label>Assignee</label>
+        <input class="form-control" formControlName="assignee">
+      </div>
+      <button class="btn btn-success" type="submit">Save</button>
+    </form>
+  </div>
+</div>

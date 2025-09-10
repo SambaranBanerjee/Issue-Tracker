@@ -1,0 +1,16 @@
+.table th {
+  cursor: pointer;
+  user-select: none;
+}
+
+.table th:hover {
+  background-color: #f8f9fa;
+}
+
+.badge {
+  font-size: 0.85em;
+}
+
+.page-link {
+  cursor: pointer;
+}

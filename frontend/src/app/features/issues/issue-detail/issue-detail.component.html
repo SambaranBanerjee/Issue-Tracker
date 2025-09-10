@@ -1,0 +1,6 @@
+<div class="card" @if(issue)>
+  <div class="card-header">Issue #{{ issue?.id }}</div>
+  <div class="card-body">
+    <pre>{{ issue | json }}</pre>
+  </div>
+</div>
